@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新東方・園林誓言｜工作人員流程表 2026/5/2 v7.0</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&display=swap');
+:root{
+  --ink:#1a1a18;--cream:#f5f0e8;--parchment:#ede6d6;
+  --green:#2d5a3d;--green-mid:#3d7a52;--green-lt:#d4e8da;
+  --gold:#9a7414;--gold-lt:#f5e9c0;--red:#8b1a1a;
+  --border:#c8bfa8;--gray:#6b7280;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--cream);color:var(--ink);font-family:'Noto Sans TC',sans-serif;font-size:13px;line-height:1.6;}
+header{background:var(--green);color:#fff;padding:20px 28px 16px;border-bottom:3px solid var(--gold);}
+header h1{font-family:'Noto Serif TC',serif;font-size:20px;font-weight:700;letter-spacing:.08em;margin-bottom:3px;}
+header p{font-size:11px;opacity:.7;}
+.nav{display:flex;background:var(--parchment);border-bottom:1px solid var(--border);padding:0 28px;gap:2px;overflow-x:auto;}
+.nav-btn{padding:10px 16px;border:none;background:none;cursor:pointer;font-family:'Noto Sans TC',sans-serif;font-size:12px;font-weight:500;color:var(--gray);border-bottom:3px solid transparent;white-space:nowrap;transition:all .15s;}
+.nav-btn:hover{color:var(--green);}
+.nav-btn.active{color:var(--green);border-bottom-color:var(--green);font-weight:700;}
+.section{display:none;padding:16px 28px 50px;}
+.section.active{display:block;}
+.notice{background:var(--gold-lt);border:1px solid var(--gold);border-left:4px solid var(--gold);border-radius:4px;padding:10px 14px;margin-bottom:14px;}
+.notice h3{font-family:'Noto Serif TC',serif;font-size:12px;color:var(--gold);margin-bottom:5px;}
+.notice li{font-size:11px;color:#5a4000;margin-bottom:2px;margin-left:14px;}
+.notice strong{color:var(--red);}
+.hint{font-size:11px;color:var(--gray);margin-bottom:10px;}
+.hint span{background:var(--green-lt);border:1px solid var(--green-mid);border-radius:4px;padding:2px 8px;font-size:10px;color:var(--green);margin-left:6px;cursor:default;}
+.ov-wrap{overflow-x:auto;}
+.ov-table{border-collapse:collapse;min-width:800px;width:100%;background:#fff;border:1px solid var(--border);box-shadow:0 2px 10px rgba(0,0,0,.06);}
+.ov-table thead th{background:var(--green);color:#fff;font-family:'Noto Serif TC',serif;font-size:11px;font-weight:600;padding:9px 11px;border:1px solid rgba(255,255,255,.2);text-align:center;white-space:nowrap;}
+.ov-table thead th.th-time{background:#1a3d2b;}
+.ov-table thead th.th-loc{background:#1a3d2b;text-align:left;}
+.phase-sep td{background:var(--gold);color:#fff;font-family:'Noto Serif TC',serif;font-size:11px;font-weight:700;padding:6px 12px;letter-spacing:.06em;border-top:2px solid var(--green)!important;}
+.td-time{background:var(--green-lt);color:var(--green);font-size:11px;font-weight:700;text-align:center;white-space:pre-line;vertical-align:middle;padding:8px 10px;border:1px solid var(--border);}
+.td-loc{background:#f0f4f1;font-size:10px;font-weight:700;color:#1a3d2b;padding:6px 10px;border:1px solid var(--border);vertical-align:middle;white-space:nowrap;}
+.td-cell{padding:7px 9px;border:1px solid var(--border);vertical-align:top;cursor:pointer;transition:background .12s;}
+.td-cell:hover{background:#f0faf4;}
+.td-cell.empty{color:#ccc;font-size:10px;text-align:center;cursor:default;}
+.td-cell.empty:hover{background:inherit;}
+.person-chip{display:inline-flex;align-items:center;gap:4px;border-radius:12px;padding:2px 8px 2px 5px;margin:2px 2px 2px 0;font-size:10px;font-weight:700;color:#fff;white-space:nowrap;cursor:pointer;}
+.person-chip .dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.5);}
+.task-label{font-size:10px;color:#444;margin-top:1px;line-height:1.4;}
+.cue-tag{font-size:9px;font-weight:700;background:var(--red);color:#fff;border-radius:3px;padding:1px 4px;margin-right:3px;}
+.popup-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:100;align-items:center;justify-content:center;}
+.popup-overlay.show{display:flex;}
+.popup{background:#fff;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,.18);max-width:480px;width:90%;max-height:80vh;overflow-y:auto;padding:0;}
+.popup-header{background:var(--green);color:#fff;padding:14px 18px;border-radius:8px 8px 0 0;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;}
+.popup-header h3{font-family:'Noto Serif TC',serif;font-size:14px;font-weight:700;}
+.popup-close{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;opacity:.8;line-height:1;}
+.popup-close:hover{opacity:1;}
+.popup-body{padding:16px 18px;}
+.popup-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.popup-badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;}
+.pb-time{background:var(--green-lt);color:var(--green);}
+.pb-loc{background:#e8e8e8;color:#333;}
+.popup-task{font-size:13px;font-weight:700;color:var(--green);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.popup-notes{font-size:12px;color:#333;line-height:1.8;}
+.popup-notes .step{display:block;padding-left:16px;position:relative;margin-bottom:2px;}
+.popup-notes .step::before{content:'›';position:absolute;left:4px;color:var(--green-mid);font-weight:700;}
+.popup-items{margin-top:10px;font-size:11px;color:var(--gray);padding-top:8px;border-top:1px solid #eee;}
+.popup-items::before{content:'📦 需要物品：';font-weight:600;color:#555;}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px;}
+.controls label{font-size:11px;color:var(--green);font-weight:600;}
+.filter-group{display:flex;flex-wrap:wrap;gap:5px;}
+.btn{padding:3px 10px;border-radius:16px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-family:'Noto Sans TC',sans-serif;font-size:11px;font-weight:500;color:var(--ink);transition:all .12s;white-space:nowrap;}
+.btn:hover{border-color:var(--green);color:var(--green);}
+.btn.active{background:var(--green);color:#fff;border-color:var(--green);}
+.divider{width:1px;height:18px;background:var(--border);margin:0 2px;}
+.legend{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;}
+.legend-label{font-size:11px;color:var(--green);font-weight:600;margin-right:2px;}
+.legend-item{display:flex;align-items:center;gap:4px;font-size:10px;}
+.legend-dot{width:10px;height:10px;border-radius:50%;}
+.dt-wrap{overflow-x:auto;}
+.dt-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--border);box-shadow:0 2px 10px rgba(0,0,0,.06);}
+.dt-table thead th{background:var(--green);color:#fff;font-family:'Noto Serif TC',serif;font-size:11px;font-weight:600;padding:8px 10px;text-align:center;border:1px solid rgba(255,255,255,.15);}
+.dt-table tbody td{padding:7px 10px;border:1px solid var(--border);vertical-align:top;font-size:11px;}
+.dt-phase{background:var(--green);color:#fff;font-family:'Noto Serif TC',serif;font-size:10px;font-weight:700;text-align:center;letter-spacing:.05em;border-right:2px solid var(--gold)!important;vertical-align:middle;}
+.dt-time{background:var(--green-lt);font-size:10px;font-weight:700;color:var(--green);text-align:center;white-space:pre-line;vertical-align:middle;}
+.dt-locbar{width:4px;padding:0!important;}
+.dt-person{text-align:center;font-weight:700;font-size:11px;color:#fff;vertical-align:middle;}
+.dt-task{font-weight:600;font-size:11px;line-height:1.5;}
+.dt-note{font-size:11px;color:var(--gray);line-height:1.7;}
+.dt-note .step{display:block;padding-left:12px;position:relative;}
+.dt-note .step::before{content:'›';position:absolute;left:2px;color:var(--green-mid);font-weight:700;}
+.dt-items{font-size:10px;color:#666;background:#faf8f4;}
+tr.phase-first td{border-top:2px solid var(--green)!important;}
+tr.loc-first td{border-top:1px dashed #bbb!important;}
+.audio-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--border);}
+.audio-table th{background:var(--green);color:#fff;padding:8px 12px;font-size:11px;text-align:left;font-family:'Noto Serif TC',serif;}
+.audio-table td{padding:8px 12px;font-size:11px;border-bottom:1px solid #eee;vertical-align:middle;}
+.audio-table tr:last-child td{border-bottom:none;}
+.audio-table tr:nth-child(even) td{background:#faf8f4;}
+.audio-input{width:100%;border:1px solid var(--border);border-radius:4px;padding:5px 8px;font-family:'Noto Sans TC',sans-serif;font-size:11px;background:var(--cream);}
+.audio-input:focus{outline:none;border-color:var(--green);}
+.cue-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 6px;border-radius:8px;background:var(--red);color:#fff;margin-right:3px;}
+.vol-badge{display:inline-block;font-size:10px;padding:2px 5px;border-radius:4px;background:var(--green-lt);color:var(--green);font-weight:600;}
+</style>
+</head>
+<body>
+<header>
+  <h1>新東方・園林誓言｜工作人員流程表 <span style="font-size:13px;opacity:.7">v7.0</span></h1>
+  <p>2026 年 5 月 2 日（六）・成美文化園・僅供內部使用</p>
+</header>
+<nav class="nav">
+  <button class="nav-btn active" onclick="showTab('overview')">🗺️ 全場大表</button>
+  <button class="nav-btn" onclick="showTab('detail')">👤 個人流程表</button>
+  <button class="nav-btn" onclick="showTab('audio')">🎵 音控 Cue 表</button>
+</nav>
+
+<div class="section active" id="tab-overview">
+  <div class="notice">
+    <h3>閱讀說明</h3>
+    <ul>
+      <li>橫向看：同一時間各地點在發生什麼</li>
+      <li><strong>點擊任何人員格子</strong>，可展開查看完整備註細節</li>
+    </ul>
+  </div>
+  <p class="hint">點擊格子查看細節 <span>👆 點我試試</span></p>
+  <div class="ov-wrap" id="ovWrap"></div>
+</div>
+
+<div class="section" id="tab-detail">
+  <div class="notice">
+    <h3>⚠️ 關鍵提醒</h3>
+    <ul>
+      <li><strong>彩排</strong> — 朋喬主持＋Erin協助，Dan儀式主持，10:45開始，11:30前完成</li>
+      <li><strong>報到</strong> — Pei主導準新人報到，妞妞＋Sammi負責廠商＋媒體，25個女更衣間，30–40分鐘全換完</li>
+      <li><strong>道具確認</strong> — Dan 10:15各站確認時確認：紅托盤・合卺酒杯×2・秤桿・紅蓋頭就位</li>
+      <li><strong>指引</strong> — 劉芳幸福大廳、伯特松緣一樓入口（停車場旁）</li>
+      <li><strong>導覽三組</strong> — Pei新人A（12:20）、成美A新人B（12:22）、Dan VIP（12:25）</li>
+    </ul>
+  </div>
+  <div class="controls">
+    <label>篩選人員：</label>
+    <div class="filter-group" id="personFilters"><button class="btn active" onclick="filterPerson('all',this)">全部</button></div>
+    <div class="divider"></div>
+    <label>篩選時段：</label>
+    <div class="filter-group" id="phaseFilters"><button class="btn active" onclick="filterPhase('all',this)">全部</button></div>
+  </div>
+  <div class="legend" id="legend"></div>
+  <div class="dt-wrap">
+  <table class="dt-table">
+    <colgroup><col style="width:90px"><col style="width:95px"><col style="width:4px"><col style="width:70px"><col style="width:120px"><col style="width:130px"><col><col style="width:120px"></colgroup>
+    <thead><tr><th>事件階段</th><th>時間</th><th style="padding:0"></th><th>人員</th><th>地點</th><th>任務</th><th>備註／細節</th><th>需要物品</th></tr></thead>
+    <tbody id="dtBody"></tbody>
+  </table>
+  </div>
+</div>
+
+<div class="section" id="tab-audio">
+  <div class="notice">
+    <h3>音控操作說明</h3>
+    <ul>
+      <li>所有曲目事先剪輯至正確長度，命名清楚，存於<strong>2個裝置</strong>（防備用）</li>
+      <li>主持人說話時降低音量，說完後恢復</li>
+      <li>音樂名稱請活動前填寫完畢</li>
+    </ul>
+  </div>
+  <table class="audio-table">
+    <thead><tr><th style="width:40px">#</th><th style="width:90px">時間</th><th style="width:120px">段落</th><th>音樂名稱</th><th style="width:80px">音量</th><th>操作備註</th></tr></thead>
+    <tbody id="audioBody"></tbody>
+  </table>
+</div>
+
+<div class="popup-overlay" id="popupOverlay" onclick="closePopup(event)">
+  <div class="popup" id="popup">
+    <div class="popup-header">
+      <h3 id="popupTitle"></h3>
+      <button class="popup-close" onclick="closePopup()">×</button>
+    </div>
+    <div class="popup-body">
+      <div class="popup-meta" id="popupMeta"></div>
+      <div class="popup-task" id="popupTask"></div>
+      <div class="popup-notes" id="popupNotes"></div>
+      <div class="popup-items" id="popupItems"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const PC={
+  "朋喬":"#784212","Erin":"#8b1a1a","伯特":"#1A5276","Abby":"#9a7414",
+  "劉芳":"#6C3483","杜杜":"#4a6741","Dan":"#534AB7","Pei":"#2d5a3d",
+  "妞妞":"#5D6D7E","Sammi":"#4A6741",
+  "成美A":"#7B7D7D","成美押後":"#999",
+  "表演者":"#884EA0","表演者A":"#884EA0","表演者B":"#884EA0",
+  "模特兒男":"#7D6608","模特兒女":"#A04000",
+  "引導員A（成美）":"#7B7D7D","引導員B（成美）":"#7B7D7D"
+};
+const LOC_COLOR={
+  "松緣二樓換裝區":"#1A5276","花好月圓":"#2d5a3d","後台":"#6C3483",
+  "全場":"#784212","松緣一樓宴會廳":"#922B21","動線":"#4A6741","園區":"#3D7A5E",
+  "幸福大廳":"#117A65","松緣一樓入口":"#7E5109"
+};
+
+// [phase, time, loc, person, task, note, items]
+const DATA=[
+  // 前一天
+  ["前一天準備","5/1（日）","成美文化園全場","朋喬","場地先行準備","① 搭建告示牌、文具擺放\n② 換裝動線確認、女更衣間×25確認\n③ 廠商展示區9攤位置預確認\n④ 與成美確認隔天時程","對講機、流程表"],
+
+  // 09:30 場勘
+  ["場地勘查","09:30–10:00","成美文化園全場","朋喬","帶全員場地勘查（30分鐘）","路線：幸福大廳→指引點→松緣二樓（報到區、換裝區、廠商展示）→花好月圓→後台→景點方向確認","對講機"],
+  ["場地勘查","09:30–10:00","成美文化園全場","Erin","跟隨勘查","熟悉報到動線、換裝區位置","—"],
+  ["場地勘查","09:30–10:00","成美文化園全場","Pei","跟隨勘查","熟悉報到動線，準備主導準新人報到流程","—"],
+  ["場地勘查","09:30–10:00","成美文化園全場","Dan","跟隨勘查","確認儀式動線：新郎出場路線、花轎位置、主視覺距離","流程表"],
+  ["場地勘查","09:30–10:00","成美文化園全場","Abby","跟隨勘查","勘查後確認戶外音響設備位置","音控設備、手持Mic×2"],
+  ["場地勘查","09:30–10:00","成美文化園全場","伯特","跟隨勘查","熟悉松緣一樓入口位置及引導路線","—"],
+  ["場地勘查","09:30–10:00","成美文化園全場","杜杜","跟隨勘查","確認拍攝動線、重點角度","攝影設備"],
+  ["場地勘查","09:30–10:00","成美文化園全場","劉芳","跟隨勘查","熟悉幸福大廳→松緣二樓動線，確認換裝區及道具位置","—"],
+
+  // 10:00 行前會
+  ["行前會","10:00–10:15","松緣會館二樓","朋喬","主持行前會（15分鐘）","① 分發流程表\n② 確認每人了解站位及任務\n③ 確認對講機頻道一致\n④ 行前會結束後各自散開確認物品","對講機、流程表"],
+  ["行前會","10:00–10:15","松緣會館二樓","Erin","參與行前會","接收流程表，確認任務","流程表"],
+  ["行前會","10:00–10:15","松緣會館二樓","Pei","參與行前會","接收流程表，確認準新人報到流程","流程表、名單、識別證"],
+  ["行前會","10:00–10:15","松緣會館二樓","Dan","參與行前會","接收流程表＋儀式腳本","流程表、儀式腳本"],
+  ["行前會","10:00–10:15","松緣會館二樓","Abby","參與行前會","接收流程表","流程表、音控設備"],
+  ["行前會","10:00–10:15","松緣會館二樓","伯特","參與行前會","接收流程表，確認引導任務","流程表"],
+  ["行前會","10:00–10:15","松緣會館二樓","杜杜","參與行前會","接收流程表","流程表、攝影設備"],
+  ["行前會","10:00–10:15","松緣會館二樓","劉芳","參與行前會","接收流程表，確認道具及換裝區任務","流程表"],
+  ["行前會","10:00–10:15","松緣會館二樓","妞妞","參與行前會","接收流程表，確認廠商＋媒體報到流程","流程表、對講機"],
+  ["行前會","10:00–10:15","松緣會館二樓","Sammi","參與行前會","接收流程表，確認廠商接待流程","流程表、對講機"],
+
+  // 10:15 各站確認
+  ["各站就緒確認","10:15–10:30","幸福大廳","劉芳","幸福大廳引導就位","引導賓客往松緣會館二樓報到區\n與成美引導員A協同","引導指示牌"],
+  ["各站就緒確認","10:15–10:30","松緣會館一樓入口（停車場旁）","伯特","松緣一樓入口引導就位","接住從停車場直走進來的賓客\n指引往松緣二樓報到區\n不定點，可在入口範圍移動","引導指示牌"],
+  ["各站就緒確認","10:15–10:30","松緣會館二樓","Pei","報到桌最終確認","① 準新人名單完整（35組）\n② 識別證備妥\n③ 回報朋喬「報到桌就緒」","名單、筆、識別證"],
+  ["各站就緒確認","10:15–10:30","松緣會館二樓","妞妞","廠商＋媒體報到桌確認","① 廠商名單（21人）＋媒體名單（5人）完整\n② 識別證備妥\n③ 回報朋喬「廠商媒體報到桌就緒」","廠商名單、媒體名單、識別證"],
+  ["各站就緒確認","10:15–10:30","松緣會館二樓","Sammi","廠商展示區確認","① 9攤廠商展示區設置確認\n② 廠商接待流程確認","廠商名單"],
+  ["各站就緒確認","10:15–10:30","松緣會館二樓","劉芳（換裝區）","換裝區就緒","① 漢服按尺寸男女分區掛好\n② 女更衣間×25確認燈光掛鉤椅子齊備\n③ 道具確認：合卺酒杯×2、秤桿、紅蓋頭、紅托盤\n④ 回報朋喬「換裝區就緒」","漢服、髮型工具、道具"],
+  ["各站就緒確認","10:15–10:30","花好月圓","Dan","道具定點確認","① 紅托盤置於儀式擺台（秤桿放托盤上）\n② 合卺酒杯×2洗淨備妥（另一托盤上）\n③ 紅蓋頭確認備妥\n④ 回報朋喬「花好月圓道具就緒」","合卺酒杯×2、秤桿、紅蓋頭、紅托盤"],
+  ["各站就緒確認","10:15–10:30","花好月圓（戶外）","Abby","音響測試","① 戶外PA喇叭開機確認\n② 手持Mic×2測試\n③ 確認音量可傳至賓客集合區\n④ 確認成美室內背景音樂輪播正常\n⑤ 回報朋喬「音響就緒」","音控設備、手持Mic×2"],
+  ["各站就緒確認","10:15–10:30","成美文化園全場","杜杜","攝影就緒確認","① 設備電量、記憶卡確認\n② 花好月圓拍攝角度確認\n③ 回報朋喬「攝影就緒」","攝影設備"],
+  ["各站就緒確認","10:15–10:30","成美文化園全場","朋喬","接收各站回報","全站回報就緒後宣布「開始迎賓」","對講機"],
+
+  // 10:30 報到換裝
+  ["迎賓報到・換裝","10:30–11:30","松緣會館二樓","Pei","主導準新人報到","① 確認準新人名單打勾（35組，每組2人）\n② 發放識別證\n③ 引導至漢服換裝區\n④ 25個女更衣間同時開放，估30–40分鐘換完\n⑤ 11:00確認最後一批進度","名單、筆、識別證"],
+  ["迎賓報到・換裝","10:30–11:30","松緣會館二樓","妞妞","廠商＋媒體報到","① 廠商（21人）＋媒體（5人）報到確認\n② 發放識別證\n③ 廠商引導至廠商展示區，媒體引導至換裝區","廠商名單、媒體名單、識別證"],
+  ["迎賓報到・換裝","10:30–11:30","松緣會館二樓","Sammi","廠商接待","① 協助廠商進入展示攤位\n② 確認廠商展示區秩序","廠商名單"],
+  ["迎賓報到・換裝","10:30–11:30","松緣會館二樓","杜杜","拍攝報到換裝","記錄賓客報到換裝過程","攝影設備"],
+  ["迎賓報到・換裝","10:30–11:30","松緣會館二樓","朋喬","場控巡視","巡視換裝進度，確認各站秩序","對講機"],
+  ["迎賓報到・換裝","10:30–11:30","幸福大廳","劉芳","幸福大廳引導（持續）","持續引導賓客往松緣二樓","引導指示牌"],
+  ["迎賓報到・換裝","10:30–11:30","松緣會館一樓入口（停車場旁）","伯特","松緣一樓入口引導（持續）","持續接引從停車場進來的賓客","引導指示牌"],
+
+  // 10:45 彩排
+  ["彩排","10:45–11:30","花好月圓（戶外）","朋喬","統籌彩排","① 確認所有彩排人員到齊\n② 彩排順序：開場表演走位→新郎出場→托盤秤桿交接→新娘出轎→掀蓋頭→並肩走向主視覺→托盤酒杯交接→合卺酒→完整連貫走一遍\n③ 計時全程確認8分鐘內完成","對講機、計時器"],
+  ["彩排","10:45–11:30","花好月圓（戶外）","Erin","彩排現場協助","陪同朋喬，提供現場意見，協助計時","—"],
+  ["彩排","10:45–11:30","花好月圓（戶外）","Dan","儀式主持彩排","① 開場詞（約20秒）\n② 引導新郎出場台詞\n③ 引導新娘出轎台詞\n④ 引導掀蓋頭台詞\n⑤ 引導並肩同行台詞\n⑥ 引導合卺酒：「請交叉手臂，共飲合卺酒」\n⑦ 祝福詞（45秒）\n⑧ 宣告儀式完成台詞","儀式腳本、手持Mic"],
+  ["彩排","10:45–11:30","花好月圓（戶外）","Abby","cue音樂彩排","依序確認：迎賓→表演→新郎出場→新娘出轎→同行→合卺酒→退場各段音樂cue點","音控設備"],
+  ["彩排","10:45–11:30","花好月圓（戶外）","模特兒男","新郎走位彩排","① 就定位於主視覺後方\n② 聽cue從主視覺後方走出（約10步）\n③ 走向花轎（約15步），花轎前停步\n④ 接過表演者A遞上的托盤（托盤上有秤桿）\n⑤ 從托盤取秤桿輕挑新娘紅蓋頭，停住3秒\n⑥ 將秤桿放回托盤，表演者A收走\n⑦ 表演者B迅速將托盤放上合卺酒杯\n⑧ 邀請新娘並肩走向主視覺（約20步），停步面向賓客\n⑨ 接過表演者B遞上的托盤（托盤上有酒杯）\n⑩ 與新娘交叉手臂共飲，停住3秒","禮服"],
+  ["彩排","10:45–11:30","花好月圓（戶外）","模特兒女","新娘走位彩排","① 就位坐入花轎，戴上紅蓋頭\n② 聽cue緩步走出花轎，在花轎前停步\n③ 被秤桿掀起蓋頭，停住3秒（拍照黃金時間）\n④ 與新郎並肩走向主視覺，停步面向賓客\n⑤ 與新郎交叉手臂共飲合卺酒，停住3秒","禮服、紅蓋頭"],
+  ["彩排","10:45–11:30","花好月圓（戶外）","表演者A","托盤＋秤桿遞送彩排","① 表演結束退至場側備位（托盤上已放好秤桿）\n② 走3步至新郎面前，雙手捧托盤呈遞\n③ 新郎取秤桿掀蓋頭後，將秤桿放回托盤\n④ 表演者A迅速退至旁邊，表演者B過來將酒杯放上托盤\n⑤ 表演者A再走至新人面前捧托盤呈遞（托盤上現為酒杯）\n⑥ 新人飲完後收回托盤，退至場側","紅托盤、秤桿、合卺酒杯×2"],
+  ["彩排","10:45–11:30","花好月圓（戶外）","表演者B","酒杯換托盤彩排","① 在表演者A遞秤桿時備妥合卺酒杯\n② 新郎將秤桿放回托盤後，迅速走至表演者A旁\n③ 將合卺酒杯×2放上托盤，讓表演者A繼續呈遞","合卺酒杯×2"],
+
+  // 11:30 備戰
+  ["彩排後備戰","11:30–12:00","花好月圓（戶外）","朋喬","各站備戰","11:25通知Abby切換迎賓音樂\n確認模特兒女11:50前就位花轎\n巡視換裝進度","對講機"],
+  ["彩排後備戰","11:30–12:00","花好月圓（戶外）","Abby","Stand by音控","11:30切換迎賓音樂（戶外播放）\n確認Mic音量正常","音控設備"],
+  ["彩排後備戰","11:30–12:00","花好月圓（戶外）","Erin","確認換裝收尾","確認賓客換裝完成，往花好月圓移動，回報朋喬","對講機"],
+  ["彩排後備戰","11:30–12:00","花好月圓（戶外）","Dan","就位待命","在出場位置就定位，確認儀式腳本","儀式腳本"],
+  ["彩排後備戰","11:30–12:00","花好月圓（戶外）","模特兒女","⚠️ 11:50前就位坐入花轎","戴上紅蓋頭，等待開場cue","禮服、紅蓋頭"],
+  ["彩排後備戰","11:30–12:00","松緣會館二樓","Pei","督促換裝完成","確認最後一批賓客換裝完成，往花好月圓移動","對講機"],
+  ["彩排後備戰","11:30–12:00","幸福大廳","劉芳","通知大廳賓客集合","引導幸福大廳賓客往花好月圓移動","—"],
+  ["彩排後備戰","11:30–12:00","松緣會館一樓入口（停車場旁）","伯特","通知入口賓客集合","引導賓客往花好月圓移動","—"],
+  ["彩排後備戰","11:30–12:00","成美文化園全場","杜杜","拍攝集合畫面","記錄賓客集合、漢服廣場畫面","攝影設備"],
+
+  // 12:00 開場表演
+  ["開場表演","12:00–12:05","花好月圓（戶外）","朋喬","確認賓客就位後下令","接收各站「集合完成」回報，通知Abby「可以開始」","對講機"],
+  ["開場表演","12:00–12:05","花好月圓（戶外）","Abby","🔴 cue開場表演音樂","切換為開場表演音樂（戶外，音量拉高）","音控設備"],
+  ["開場表演","12:00–12:05","花好月圓（戶外）","表演者","開場舞蹈（5分鐘）","① 表演結束後表演者A退至托盤（秤桿）備位\n② 表演者B退至備位等待換放酒杯\n③ 其餘3名退至場側靜立","表演服裝"],
+  ["開場表演","12:00–12:05","花好月圓（戶外）","杜杜","拍攝開場表演","記錄開場全程，確認掀蓋頭拍攝角度就位","攝影設備"],
+
+  // 12:05 主儀式
+  ["主儀式","12:05","花好月圓（戶外）","Dan","新郎出場","Abby cue新郎出場音樂\nDan：「請我們的新郎從主視覺後方緩緩走出……」\n新郎從主視覺後方走出（約10步），走向花轎（約15步），花轎前停步","儀式腳本、手持Mic"],
+  ["主儀式","12:06","花好月圓（戶外）","Dan","托盤秤桿交接","表演者A捧托盤（上有秤桿）走至新郎面前呈遞\nDan：「請新郎取起秤桿……」\nAbby cue新娘出轎音樂","手持Mic"],
+  ["主儀式","12:06","花好月圓（戶外）","Dan","新娘出轎","Dan：「請我們的新娘緩緩走出花轎……」\n新娘從花轎緩步走出，在花轎前與新郎並站","手持Mic"],
+  ["主儀式","12:07","花好月圓（戶外）","Dan","掀蓋頭","Dan：「請新郎以秤桿，輕輕掀起新娘的蓋頭……」\n新郎以秤桿掀起紅蓋頭，停住3秒（拍照黃金時間）\n新郎將秤桿放回托盤，表演者A收走\n⚠️ 表演者B迅速將合卺酒杯×2放上托盤","手持Mic"],
+  ["主儀式","12:08","花好月圓（戶外）","Dan","並肩走向主視覺","Abby cue同行音樂\nDan：「請兩位並肩，走向象徵你們愛情的主視覺……」\n新人並肩走向主視覺（約20步），停步面向賓客","手持Mic"],
+  ["主儀式","12:09","花好月圓（戶外）","Dan","合卺酒","表演者A捧托盤（上有酒杯×2）走至新人面前呈遞\nDan：「請兩位交叉手臂，共飲合卺酒……」\n新人交叉手臂共飲，停住3秒\n表演者A收回托盤退至場側","手持Mic"],
+  ["主儀式","12:10","花好月圓（戶外）","Dan","祝福詞（45秒）","Dan致祝福詞，結尾請賓客鼓掌","手持Mic"],
+  ["主儀式","12:12","花好月圓（戶外）","Dan","退場","Abby cue退場音樂\n模特兒鞠躬退場\nDan宣布導覽分組","手持Mic"],
+  ["主儀式","12:05–12:13","花好月圓（戶外）","Abby","音樂cue點（戶外stand by）","依序cue：新郎出場→新娘出轎→同行→合卺酒→退場","音控設備"],
+  ["主儀式","12:05–12:13","花好月圓（戶外）","杜杜","⚠️ 重點拍攝","掀蓋頭瞬間連拍3秒（全場最高潮）\n合卺酒瞬間連拍","攝影設備"],
+  ["主儀式","12:05–12:13","花好月圓（戶外）","朋喬","全場監控","確認賓客秩序，隨時處理突發","對講機"],
+  ["主儀式","12:05–12:13","花好月圓（戶外）","Erin","場控協助","協助朋喬維持場地秩序","—"],
+
+  // 12:13 分組
+  ["宣布導覽分組","12:16","花好月圓（戶外）","朋喬","宣布三組導覽分組","對講機確認Pei、成美A、Dan三帶隊人員就位","對講機"],
+  ["宣布導覽分組","12:16","花好月圓（戶外）→松緣會館一樓","Abby","移至松緣一樓測試宴會音響","確認BGM可播放、音量適合室內\n回報朋喬「松緣音響就緒」","音控設備"],
+  ["宣布導覽分組","12:13","花好月圓（戶外）","劉芳","收拾道具後至松緣二樓","① 紅托盤收拾\n② 合卺酒杯×2（清洗）\n③ 秤桿收拾\n④ 紅蓋頭收拾\n⑤ 全部收拾完畢後至松緣二樓準備換裝收尾","打包袋"],
+
+  // 12:20 導覽
+  ["導覽","12:20 出發","成美文化園園區","Pei","🔴 帶新人組A（17組，34人）","12:20 和園・日本黑松（7分）：「四支樹幹代表魏家四兄弟——根是一體的。」\n12:27 歸鄉步道（7分）：「走過這條步道，就像跟著魏家後代一起回家。」\n12:34 成美公堂（前）（7分）：「這個字唸ㄎㄧㄤˇ，把孔跟孟藏在裡面——是魏家百年家訓。」\n12:41 成美公堂（內）（7分）：帶入內感受空間、拍照\n12:48 和園・紫檀楓港柿（7分）：「比鄭和下西洋還老——550歲。」\n12:55 花好月圓主視覺拍照（7分）\n13:02 導覽結束，返回松緣二樓換回便服","—"],
+  ["導覽","12:20 出發","成美文化園園區","杜杜","押後 Pei 組（新人A）","壓隊確認沒有落單賓客\n同時拍攝各景點互動畫面","攝影設備"],
+  ["導覽","12:22 出發","成美文化園園區","成美A","🟡 帶新人組B（17組，34人）＋妞妞","12:22 花好月圓主視覺拍照（7分）\n12:29 和園・日本黑松（7分）\n12:36 歸鄉步道（14分，長停留）\n12:50 成美公堂（前）（7分）\n12:57 成美公堂（內）（7分）\n13:04 和園・紫檀楓港柿（7分）\n13:11 導覽結束，返回松緣二樓換回便服","—"],
+  ["導覽","12:22 出發","成美文化園園區","妞妞","隨行新人組B","協助成美A維持隊伍秩序，持對講機","對講機"],
+  ["導覽","12:25 出發","成美文化園園區","Dan","⭐ 帶VIP廠商組（21人）","12:25 花好月圓主視覺拍照（14分，長停留）：Dan說明松緣宴會廳規格＋婚宴方案\n12:39 成美公堂（前）（7分）：文化背景說明\n12:46 成美公堂（內）（7分）\n12:53 歸鄉步道（14分，長停留）：廠商自由拍照交流\n13:07 和園・日本黑松（7分）\n13:14 導覽結束，前往松緣二樓廠商展示區","—"],
+  ["導覽","12:25 出發","成美文化園園區","伯特","押後 Dan 組（VIP）","壓隊確認沒有落單賓客","—"],
+  ["導覽","12:20–13:15","成美文化園全場","朋喬","對講機統籌各組進度","確認各組按時到達景點，處理突發狀況","對講機"],
+  ["導覽","12:20–13:15","松緣會館二樓","劉芳","松緣二樓準備","確認換裝區準備好迎接回來換裝的賓客","—"],
+
+  // 13:02 換裝+逛攤位
+  ["換裝・逛攤位","13:02–13:25","松緣會館二樓","Pei","引導新人A換回便服＋逛攤位","換裝約20分鐘，同時可逛廠商展示區9攤\n13:25前引導往松緣一樓","—"],
+  ["換裝・逛攤位","13:02–13:25","松緣會館二樓","劉芳","換裝區管理","協助賓客有序換裝，確認漢服歸還回收","—"],
+  ["換裝・逛攤位","13:11–13:25","松緣會館二樓","妞妞","引導新人B換回便服＋逛攤位","13:25前引導往松緣一樓","—"],
+  ["換裝・逛攤位","13:14–13:25","松緣會館二樓","Dan","帶VIP廠商組逛攤位","名片交換、廠商互動\n13:25引導往松緣一樓","—"],
+  ["換裝・逛攤位","13:14–13:25","松緣會館二樓","伯特","協助VIP組攤位動線","—","—"],
+
+  // 13:20 入座
+  ["引導入座","13:20–13:25","松緣會館一樓宴會廳","朋喬","對講機通知全員引導賓客入座","「請引導賓客往松緣一樓移動」","對講機"],
+  ["引導入座","13:20–13:25","松緣會館一樓宴會廳","Abby","播放餐敘BGM","迎接賓客入場","音控設備"],
+  ["引導入座","13:20–13:25","松緣會館一樓宴會廳","Erin","場控","協助賓客找座位","—"],
+  ["引導入座","13:20–13:25","松緣會館一樓宴會廳","伯特","場控","協助賓客找座位","—"],
+
+  // 宴會
+  ["餐敘宴會","13:25 開場","松緣會館一樓宴會廳","朋喬","確認全員入座，通知Pei開場","—","對講機"],
+  ["餐敘宴會","13:25 開場","松緣會館一樓宴會廳","Pei","開場致詞","感謝賓客出席，說明今日活動意義","手持Mic、主持腳本"],
+  ["餐敘宴會","13:25 開場","松緣會館一樓宴會廳","Abby","音控","主持說話時降BGM，說完恢復","音控設備"],
+  ["餐敘宴會","13:25 開場","松緣會館一樓宴會廳","杜杜","拍攝開場","—","攝影設備"],
+  ["餐敘宴會","13:25 開場","松緣會館一樓宴會廳","Dan","入座待命","視需要支援Pei","—"],
+  ["餐敘宴會","13:30 第一道菜","松緣會館一樓宴會廳","Pei","上第一道菜＋介紹","通知成美上菜：黃燜花膠金湯\n介紹菜色\n介紹成美婚宴專案及下訂優惠","手持Mic、主持腳本"],
+  ["餐敘宴會","13:50 第二道菜","松緣會館一樓宴會廳","Pei","上第二道菜＋廠商介紹","通知成美上菜：紅燒和牛臉頰\n介紹菜色\n逐一介紹今日廠商","手持Mic、主持腳本"],
+  ["餐敘宴會","13:50 第二道菜","松緣會館一樓後門口","朋喬","通知備伴手禮","⚠️ 通知妞妞立刻去後門口備好伴手禮","對講機"],
+  ["餐敘宴會","14:10 第三道菜","松緣會館一樓宴會廳","Pei","上第三道菜＋提醒伴手禮","通知成美上菜：福緣三寶糯米飯\n介紹菜色\n提醒賓客門口領取成美伴手禮","手持Mic、主持腳本"],
+  ["餐敘宴會","14:10 第三道菜","松緣會館一樓後門口","妞妞","備妥伴手禮","就位準備發放（成美伴手禮52份）","伴手禮×52（成美提供）"],
+  ["餐敘宴會","14:30 第四道菜","松緣會館一樓宴會廳","Pei","上第四道菜＋結語","通知成美上菜：手作乳香腰果露\n介紹菜色\n致結語：感謝所有人，宣告活動結束","手持Mic、主持腳本"],
+  ["餐敘宴會","14:50 出口發放","松緣會館一樓出口","妞妞","正式發放成美伴手禮","確認每位賓客都有領取（新人35份＋廠商12份＋媒體5份）","伴手禮×52（成美提供）"],
+  ["餐敘宴會","14:50 出口發放","松緣會館一樓出口","伯特","協助發放","—","—"],
+  ["餐敘宴會","14:50 出口發放","松緣會館一樓出口","Sammi","協助發放","—","—"],
+  ["餐敘宴會","14:50 自由交流","松緣會館一樓宴會廳","Abby","維持BGM","音量可稍提","音控設備"],
+  ["餐敘宴會","14:50 自由交流","松緣會館一樓宴會廳","杜杜","拍攝交流素材","—","攝影設備"],
+
+  // 活動收尾
+  ["活動收尾","15:00","成美文化園全場","朋喬","最終場地確認","拍照存檔，確認無遺留物品","—"],
+  ["活動收尾","15:00","松緣會館一樓宴會廳","Erin","清點","確認無遺留","—"],
+  ["活動收尾","15:00","松緣會館一樓宴會廳","Abby","音響歸還","關閉音響，確認歸還","—"],
+  ["活動收尾","15:00","松緣會館二樓","劉芳","漢服歸還完成","確認數量完整","—"],
+  ["活動收尾","15:00","成美文化園全場","杜杜","設備收拾","—","攝影設備"],
+];
+
+const AUDIO=[
+  {t:"11:30",seg:"迎賓背景音樂",vol:"低背景（室內成美輪播）",note:"賓客報到換裝期間，室內成美負責輪播"},
+  {t:"12:00",seg:"【開場曲】",vol:"100%（戶外）",note:"①表演者在背景前方中央跳開場舞，主持人候於側台靜默"},
+  {t:"12:07",seg:"【新郎入場曲】",vol:"中高",note:"②表演者退至走道兩側，主持人緩步至中央開口"},
+  {t:"12:09",seg:"（降至60%）",vol:"60%",note:"④新郎抵達花轎前，表演者A遞托盤（上有秤桿）"},
+  {t:"12:11",seg:"（降至最低）",vol:"最低",note:"⑥掀蓋頭前——攝影攝錄影前移就位，全場靜默3秒"},
+  {t:"12:12",seg:"（漸升回80%）",vol:"80%",note:"⑦秤桿放回，表演者B換放酒杯，5秒內完成"},
+  {t:"12:13",seg:"【同行曲／尾聲主題】",vol:"中",note:"⑧兩人並肩走回背景前方"},
+  {t:"12:15",seg:"（降至最低）",vol:"最低",note:"⑩合卺酒——莊重宣讀，新人交臂舉杯，全場靜默3秒"},
+  {t:"12:16",seg:"【喜慶收尾曲】",vol:"中高",note:"⑩「禮成」落聲即cue，接掌聲音效或喜慶收尾曲"},
+  {t:"13:20",seg:"餐敘BGM（入場）",vol:"低背景",note:"全員入座，迎接賓客"},
+  {t:"13:25",seg:"餐敘BGM（開場）",vol:"低背景",note:"主持說話時降低，說完恢復"},
+  {t:"13:30",seg:"餐敘BGM（第一道）",vol:"低背景",note:"同上"},
+  {t:"13:50",seg:"餐敘BGM（第二道）",vol:"低背景",note:"同上"},
+  {t:"14:10",seg:"餐敘BGM（第三道）",vol:"低背景",note:"同上"},
+  {t:"14:30",seg:"餐敘BGM（第四道）",vol:"低背景",note:"同上"},
+  {t:"14:50",seg:"餐敘BGM（自由交流）",vol:"稍高背景",note:"結語後可稍提音量"},
+  {t:"15:00",seg:"結束",vol:"—",note:"關閉音響"},
+];
+
+// ── 全場大表資料 ──
+const OV=[
+  {phase:"前一天準備",time:"5/1（日）",rows:[
+    {loc:"成美文化園全場",people:[
+      {name:"朋喬",task:"場地先行準備",note:"① 搭建告示牌、文具擺放\n② 換裝動線確認、女更衣間×25確認\n③ 廠商展示區9攤位置預確認\n④ 與成美確認隔天時程",items:"對講機、流程表"},
+    ]}
+  ]},
+  {phase:"場地勘查",time:"09:30–10:00",rows:[
+    {loc:"成美文化園全場",people:[
+      {name:"朋喬",task:"帶全員場地勘查（30分鐘）",note:"路線：幸福大廳→指引點→松緣二樓（報到區、換裝區、廠商展示）→花好月圓→後台→景點方向確認",items:"對講機"},
+      {name:"Erin",task:"跟隨勘查",note:"熟悉報到動線、換裝區位置",items:"—"},
+      {name:"Pei",task:"跟隨勘查",note:"熟悉報到動線，準備主導準新人報到流程",items:"—"},
+      {name:"Dan",task:"跟隨勘查",note:"確認儀式動線：新郎出場路線、花轎位置、主視覺距離",items:"流程表"},
+      {name:"Abby",task:"跟隨勘查→確認戶外音響位置",note:"勘查後確認戶外PA喇叭位置",items:"音控設備、手持Mic×2"},
+      {name:"伯特",task:"跟隨勘查",note:"熟悉松緣一樓入口位置及引導路線",items:"—"},
+      {name:"杜杜",task:"跟隨勘查",note:"確認拍攝動線、重點角度",items:"攝影設備"},
+      {name:"劉芳",task:"跟隨勘查",note:"熟悉幸福大廳→松緣二樓動線，確認換裝區及道具位置",items:"—"},
+    ]}
+  ]},
+  {phase:"行前會",time:"10:00–10:15",rows:[
+    {loc:"松緣會館二樓",people:[
+      {name:"朋喬",task:"主持行前會（15分鐘）",note:"① 分發流程表\n② 確認每人了解站位及任務\n③ 確認對講機頻道一致\n④ 行前會結束後各自散開確認物品",items:"對講機、流程表"},
+      {name:"Erin",task:"參與行前會",note:"接收流程表，確認任務",items:"流程表"},
+      {name:"Pei",task:"參與行前會",note:"接收流程表，確認準新人報到流程",items:"流程表、名單、識別證"},
+      {name:"Dan",task:"參與行前會",note:"接收流程表＋儀式腳本",items:"流程表、儀式腳本"},
+      {name:"Abby",task:"參與行前會",note:"接收流程表",items:"流程表、音控設備"},
+      {name:"伯特",task:"參與行前會",note:"接收流程表，確認引導任務",items:"流程表"},
+      {name:"杜杜",task:"參與行前會",note:"接收流程表",items:"流程表、攝影設備"},
+      {name:"劉芳",task:"參與行前會",note:"接收流程表，確認道具及換裝區任務",items:"流程表"},
+      {name:"妞妞",task:"參與行前會",note:"接收流程表，確認廠商＋媒體報到流程",items:"流程表、對講機"},
+      {name:"Sammi",task:"參與行前會",note:"接收流程表，確認廠商接待流程",items:"流程表、對講機"},
+    ]}
+  ]},
+  {phase:"各站就緒確認",time:"10:15–10:30",rows:[
+    {loc:"幸福大廳",people:[
+      {name:"劉芳",task:"幸福大廳引導就位",note:"引導賓客往松緣會館二樓報到區\n與成美引導員A協同，一人在入口外接，一人在廳內指向",items:"引導指示牌"},
+      {name:"引導員A（成美）",task:"幸福大廳入口引導（與劉芳協同）",note:"10:30前就位",items:"引導指示牌"},
+    ]},
+    {loc:"松緣會館一樓入口（停車場旁）",people:[
+      {name:"伯特",task:"松緣一樓入口引導就位",note:"接住從停車場直走進來的賓客\n指引往松緣二樓報到區，不定點，可在入口範圍移動",items:"引導指示牌"},
+      {name:"引導員B（成美）",task:"停車場售票亭引導（待確認）",note:"開會後確認成美是否能提供此位置人員",items:"引導指示牌"},
+    ]},
+    {loc:"松緣會館二樓",people:[
+      {name:"Pei",task:"報到桌最終確認",note:"① 準新人名單完整（35組）\n② 識別證備妥\n③ 回報朋喬「報到桌就緒」",items:"名單、筆、識別證"},
+      {name:"妞妞",task:"廠商＋媒體報到桌確認",note:"① 廠商名單（21人）＋媒體名單（5人）\n② 識別證備妥\n③ 回報朋喬「廠商媒體報到桌就緒」",items:"廠商名單、媒體名單、識別證"},
+      {name:"Sammi",task:"廠商展示區確認",note:"① 9攤廠商展示區設置確認\n② 廠商接待流程確認",items:"廠商名單"},
+      {name:"劉芳",task:"換裝區就緒",note:"① 漢服按尺寸男女分區掛好\n② 女更衣間×25確認齊備\n③ 回報朋喬「換裝區就緒」",items:"漢服、髮型工具"},
+    ]},
+    {loc:"花好月圓（戶外）",people:[
+      {name:"Abby",task:"音響測試",note:"① 戶外PA喇叭開機確認\n② 手持Mic×2測試\n③ 確認音量可傳至賓客集合區\n④ 確認成美室內背景音樂輪播正常\n⑤ 回報朋喬「音響就緒」",items:"音控設備、手持Mic×2"},
+      {name:"Dan",task:"道具定點確認",note:"① 紅托盤置於儀式擺台（秤桿放托盤上）\n② 合卺酒杯×2洗淨備妥\n③ 紅蓋頭確認備妥\n④ 回報朋喬「花好月圓道具就緒」",items:"合卺酒杯×2、秤桿、紅蓋頭、紅托盤"},
+    ]},
+    {loc:"成美文化園全場",people:[
+      {name:"朋喬",task:"接收各站回報，宣布「開始迎賓」",note:"全站回報就緒後才宣布開始",items:"對講機"},
+      {name:"杜杜",task:"攝影就緒確認",note:"① 設備電量、記憶卡確認\n② 花好月圓拍攝角度確認\n③ 回報朋喬「攝影就緒」",items:"攝影設備"},
+    ]},
+  ]},
+  {phase:"迎賓報到・換裝",time:"10:30–11:30",rows:[
+    {loc:"松緣會館二樓",people:[
+      {name:"Pei",task:"主導準新人報到",note:"① 確認準新人名單打勾（35組，每組2人）\n② 發放識別證\n③ 引導至漢服換裝區\n④ 25個女更衣間同時開放，估30–40分鐘換完",items:"名單、筆、識別證"},
+      {name:"妞妞",task:"廠商＋媒體報到",note:"① 廠商（21人）＋媒體（5人）報到確認\n② 發放識別證\n③ 廠商引導至廠商展示區，媒體引導至換裝區",items:"廠商名單、媒體名單、識別證"},
+      {name:"Sammi",task:"廠商接待",note:"① 協助廠商進入展示攤位\n② 確認廠商展示區秩序",items:"廠商名單"},
+      {name:"杜杜",task:"拍攝報到換裝",note:"記錄賓客報到換裝過程",items:"攝影設備"},
+      {name:"朋喬",task:"場控巡視",note:"巡視換裝進度，確認各站秩序",items:"對講機"},
+    ]},
+    {loc:"幸福大廳",people:[
+      {name:"劉芳",task:"幸福大廳引導（持續）",note:"持續引導賓客往松緣二樓",items:"引導指示牌"},
+    ]},
+    {loc:"松緣會館一樓入口（停車場旁）",people:[
+      {name:"伯特",task:"松緣一樓入口引導（持續）",note:"持續接引從停車場進來的賓客",items:"引導指示牌"},
+    ]},
+  ]},
+  {phase:"彩排",time:"10:45–11:30",rows:[
+    {loc:"花好月圓（戶外）",people:[
+      {name:"朋喬",task:"統籌彩排",note:"① 確認所有彩排人員到齊\n② 彩排順序：開場表演走位→新郎出場→托盤秤桿交接→新娘出轎→掀蓋頭→並肩走→托盤酒杯交接→合卺酒→完整連貫走一遍\n③ 計時全程確認8分鐘內完成",items:"對講機、計時器"},
+      {name:"Erin",task:"彩排現場協助",note:"陪同朋喬，提供現場意見，協助計時",items:"—"},
+      {name:"Dan",task:"儀式主持彩排",note:"① 開場詞（約20秒）\n② 引導新郎出場台詞\n③ 引導新娘出轎台詞\n④ 引導掀蓋頭台詞\n⑤ 引導並肩同行台詞\n⑥ 引導合卺酒：「請交叉手臂，共飲合卺酒」\n⑦ 祝福詞（45秒）\n⑧ 宣告儀式完成台詞",items:"儀式腳本、手持Mic"},
+      {name:"Abby",task:"cue音樂彩排（戶外stand by）",note:"依序確認：迎賓→表演→新郎出場→新娘出轎→同行→合卺酒→退場",items:"音控設備"},
+      {name:"模特兒男",task:"新郎走位彩排",note:"① 就定位於主視覺後方\n② 聽cue走出（約10步）→走向花轎（約15步）停步\n③ 接過表演者A捧的托盤（上有秤桿），取秤桿掀蓋頭，停住3秒\n④ 將秤桿放回托盤，表演者A收走\n⑤ 並肩走向主視覺（約20步），停步面向賓客\n⑥ 接過表演者A再次捧的托盤（上已換酒杯），交叉手臂共飲，停住3秒",items:"禮服"},
+      {name:"模特兒女",task:"新娘走位彩排",note:"① 就位坐入花轎，戴上紅蓋頭\n② ⚠️ 11:50前確認就位花轎旁\n③ 聽cue緩步走出花轎，在花轎前停步\n④ 被秤桿掀起蓋頭，停住3秒（拍照黃金時間）\n⑤ 與新郎並肩走向主視覺，交叉手臂共飲合卺酒，停住3秒",items:"禮服、紅蓋頭"},
+      {name:"表演者A",task:"托盤遞送彩排（秤桿→酒杯）",note:"① 表演結束退至場側，托盤上放好秤桿\n② 走3步至新郎面前，雙手捧托盤呈遞\n③ 新郎將秤桿放回托盤後，迅速退回讓表演者B放上酒杯\n④ 再走至新人面前，雙手捧托盤（此時上為酒杯）呈遞\n⑤ 新人飲完後收回托盤，退至場側",items:"紅托盤、秤桿、合卺酒杯×2"},
+      {name:"表演者B",task:"酒杯換托盤彩排",note:"① 備妥合卺酒杯×2\n② 表演者A收回秤桿托盤後，迅速將酒杯×2放上托盤\n③ 確認酒杯放穩後退至場側",items:"合卺酒杯×2"},
+    ]},
+  ]},
+  {phase:"彩排後備戰",time:"11:30–12:00",rows:[
+    {loc:"花好月圓（戶外）",people:[
+      {name:"朋喬",task:"各站備戰",note:"11:25通知Abby切換迎賓音樂\n確認模特兒女11:50前就位花轎\n巡視換裝進度",items:"對講機"},
+      {name:"Abby",task:"Stand by音控（戶外）",note:"11:30切換迎賓音樂（戶外播放）\n確認Mic音量正常",items:"音控設備"},
+      {name:"Erin",task:"確認換裝收尾",note:"確認賓客換裝完成，往花好月圓移動，回報朋喬",items:"對講機"},
+      {name:"Dan",task:"就位待命",note:"在出場位置就定位，確認儀式腳本",items:"儀式腳本"},
+      {name:"模特兒女",task:"⚠️ 11:50前就位坐入花轎",note:"戴上紅蓋頭，等待開場cue",items:"禮服、紅蓋頭"},
+    ]},
+    {loc:"松緣會館二樓",people:[
+      {name:"Pei",task:"督促換裝完成",note:"確認最後一批賓客換裝完成，往花好月圓移動",items:"對講機"},
+    ]},
+    {loc:"幸福大廳",people:[
+      {name:"劉芳",task:"通知大廳賓客集合",note:"引導幸福大廳賓客往花好月圓移動",items:"—"},
+    ]},
+    {loc:"松緣會館一樓入口（停車場旁）",people:[
+      {name:"伯特",task:"通知入口賓客集合",note:"引導賓客往花好月圓移動",items:"—"},
+    ]},
+    {loc:"成美文化園全場",people:[
+      {name:"杜杜",task:"拍攝集合畫面",note:"記錄賓客集合、漢服廣場畫面",items:"攝影設備"},
+    ]},
+  ]},
+  {phase:"開場表演",time:"12:00–12:05",rows:[
+    {loc:"花好月圓（戶外）",people:[
+      {name:"朋喬",task:"確認賓客就位後下令",note:"接收各站「集合完成」回報，通知Abby「可以開始」",items:"對講機"},
+      {name:"Abby",task:"🔴 cue開場表演音樂",note:"切換為開場表演音樂（戶外，音量拉高）",items:"音控設備"},
+      {name:"表演者",task:"開場舞蹈（5分鐘）",note:"① 表演結束後表演者A退至托盤（秤桿）備位\n② 表演者B退至備位等待換放酒杯\n③ 其餘3名退至場側靜立",items:"表演服裝"},
+      {name:"杜杜",task:"拍攝開場表演",note:"記錄開場全程，確認掀蓋頭拍攝角度就位",items:"攝影設備"},
+    ]},
+  ]},
+  {phase:"主儀式",time:"12:05–12:13",rows:[
+    {loc:"花好月圓（戶外）",people:[
+      {name:"Dan",task:"儀式全程主持",note:"12:05 新郎出場：「請我們的新郎從主視覺後方緩緩走出……」→走出約10步，走向花轎約15步，花轎前停步\n12:06 托盤秤桿交接：表演者A捧托盤（上有秤桿）至新郎面前呈遞\n12:06 新娘出轎：「請我們的新娘緩緩走出花轎……」→新娘緩步走出，花轎前與新郎並站\n12:07 掀蓋頭：「請新郎以秤桿，輕輕掀起新娘的蓋頭……」→新郎掀蓋頭，停住3秒→秤桿放回托盤，表演者A收走，表演者B迅速換放酒杯\n12:08 並肩走：「請兩位並肩，走向象徵你們愛情的主視覺……」→新人並肩走約20步，停步面向賓客\n12:09 合卺酒：表演者A捧托盤（上為酒杯）至新人面前→「請兩位交叉手臂，共飲合卺酒……」→共飲停住3秒，收回托盤\n12:10 祝福詞（45秒）：致祝福詞，結尾請賓客鼓掌\n12:12 退場：cue退場音樂，模特兒鞠躬退場\n12:13 宣布導覽分組",items:"儀式腳本、手持Mic"},
+      {name:"Abby",task:"音樂cue點（戶外stand by）",note:"依序cue：新郎出場→新娘出轎→同行→合卺酒→退場",items:"音控設備"},
+      {name:"杜杜",task:"⚠️ 重點拍攝",note:"掀蓋頭瞬間連拍3秒（全場最高潮）\n合卺酒瞬間連拍",items:"攝影設備"},
+      {name:"朋喬",task:"全場監控",note:"確認賓客秩序，隨時處理突發",items:"對講機"},
+      {name:"Erin",task:"場控協助",note:"協助朋喬維持場地秩序",items:"—"},
+    ]},
+  ]},
+  {phase:"宣布分組・道具收拾",time:"12:13",rows:[
+    {loc:"花好月圓（戶外）",people:[
+      {name:"朋喬",task:"宣布三組導覽分組",note:"對講機確認Pei、成美A、Dan三帶隊人員就位",items:"對講機"},
+    ]},
+    {loc:"花好月圓（戶外）→松緣會館一樓",people:[
+      {name:"Abby",task:"移至松緣一樓測試宴會音響",note:"確認BGM可播放、音量適合室內\n回報朋喬「松緣音響就緒」",items:"音控設備"},
+    ]},
+    {loc:"花好月圓（戶外）→松緣會館二樓",people:[
+      {name:"劉芳",task:"收拾道具後至松緣二樓",note:"① 紅托盤收拾\n② 合卺酒杯×2（清洗）\n③ 秤桿收拾\n④ 紅蓋頭收拾\n⑤ 全部收拾完畢後至松緣二樓準備換裝收尾",items:"打包袋"},
+    ]},
+  ]},
+  {phase:"導覽",time:"12:20–13:15",rows:[
+    {loc:"成美文化園園區",people:[
+      {name:"Pei",task:"🔴 帶新人組A（17組，34人）",note:"12:20 和園・日本黑松（7分）\n12:27 歸鄉步道（7分）\n12:34 成美公堂（前）（7分）\n12:41 成美公堂（內）（7分）\n12:48 和園・紫檀楓港柿（7分）\n12:55 花好月圓主視覺拍照（7分）\n13:02 導覽結束，返回松緣二樓換回便服",items:"—"},
+      {name:"杜杜",task:"押後 Pei 組（新人A）＋拍攝",note:"壓隊確認沒有落單賓客\n同時拍攝各景點互動畫面",items:"攝影設備"},
+      {name:"成美A",task:"🟡 帶新人組B（17組，34人）＋妞妞",note:"12:22 花好月圓主視覺拍照（7分）\n12:29 和園・日本黑松（7分）\n12:36 歸鄉步道（14分，長停留）\n12:50 成美公堂（前）（7分）\n12:57 成美公堂（內）（7分）\n13:04 和園・紫檀楓港柿（7分）\n13:11 導覽結束，返回松緣二樓換回便服",items:"—"},
+      {name:"妞妞",task:"隨行新人組B",note:"協助成美A維持隊伍秩序，持對講機",items:"對講機"},
+      {name:"Dan",task:"⭐ 帶VIP廠商組（21人）",note:"12:25 花好月圓主視覺拍照（14分，長停留）：說明宴會廳規格＋婚宴方案\n12:39 成美公堂（前）（7分）\n12:46 成美公堂（內）（7分）\n12:53 歸鄉步道（14分，長停留）\n13:07 和園・日本黑松（7分）\n13:14 導覽結束，前往松緣二樓廠商展示區",items:"—"},
+      {name:"伯特",task:"押後 Dan 組（VIP）",note:"壓隊確認沒有落單賓客",items:"—"},
+    ]},
+    {loc:"成美文化園全場",people:[
+      {name:"朋喬",task:"對講機統籌各組進度",note:"確認各組按時到達景點，處理突發狀況",items:"對講機"},
+    ]},
+    {loc:"松緣會館二樓",people:[
+      {name:"劉芳",task:"松緣二樓準備",note:"確認換裝區準備好迎接回來換裝的賓客",items:"—"},
+    ]},
+  ]},
+  {phase:"換裝・逛攤位",time:"13:02–13:25",rows:[
+    {loc:"松緣會館二樓",people:[
+      {name:"Pei",task:"引導新人A換回便服＋逛攤位",note:"換裝約20分鐘，同時可逛廠商展示區9攤\n13:25前引導往松緣一樓",items:"—"},
+      {name:"劉芳",task:"換裝區管理",note:"協助賓客有序換裝，確認漢服歸還回收",items:"—"},
+      {name:"妞妞",task:"引導新人B換回便服＋逛攤位",note:"13:25前引導往松緣一樓",items:"—"},
+      {name:"Dan",task:"帶VIP廠商組逛攤位",note:"名片交換、廠商互動\n13:25引導往松緣一樓",items:"—"},
+      {name:"伯特",task:"協助VIP組攤位動線",note:"—",items:"—"},
+    ]},
+  ]},
+  {phase:"引導入座",time:"13:20–13:25",rows:[
+    {loc:"松緣會館一樓宴會廳",people:[
+      {name:"朋喬",task:"對講機通知全員引導賓客入座",note:"「請引導賓客往松緣一樓移動」",items:"對講機"},
+      {name:"Abby",task:"播放餐敘BGM",note:"迎接賓客入場",items:"音控設備"},
+      {name:"Erin",task:"場控，協助賓客找座位",note:"—",items:"—"},
+      {name:"伯特",task:"場控，協助賓客找座位",note:"—",items:"—"},
+    ]},
+  ]},
+  {phase:"餐敘宴會",time:"13:25–14:50",rows:[
+    {loc:"松緣會館一樓宴會廳",people:[
+      {name:"朋喬",task:"確認全員入座，通知Pei開場",note:"—",items:"對講機"},
+      {name:"Pei",task:"宴會全程主持",note:"13:25 開場致詞\n13:30 第一道菜：黃燜花膠金湯＋介紹成美婚宴專案\n13:50 第二道菜：紅燒和牛臉頰＋廠商介紹\n14:10 第三道菜：福緣三寶糯米飯＋提醒伴手禮\n14:30 第四道菜：手作乳香腰果露＋致結語",items:"手持Mic、主持腳本"},
+      {name:"Abby",task:"宴會音控",note:"主持說話時降BGM，說完恢復\n14:50後可稍提音量",items:"音控設備"},
+      {name:"Dan",task:"入座待命",note:"視需要支援Pei",items:"—"},
+      {name:"杜杜",task:"拍攝宴會全程",note:"開場、上菜、賓客交流",items:"攝影設備"},
+    ]},
+    {loc:"松緣會館一樓出口",people:[
+      {name:"妞妞",task:"14:50正式發放成美伴手禮",note:"確認每位賓客都有領取（新人35份＋廠商12份＋媒體5份）",items:"伴手禮×52（成美提供）"},
+      {name:"伯特",task:"14:30協助出口發放",note:"道具收拾完畢後移至出口",items:"—"},
+      {name:"Sammi",task:"協助發放",note:"—",items:"—"},
+    ]},
+    {loc:"松緣會館二樓",people:[
+      {name:"劉芳",task:"漢服歸還整理",note:"確認數量完整",items:"—"},
+    ]},
+  ]},
+  {phase:"活動收尾",time:"15:00",rows:[
+    {loc:"成美文化園全場",people:[
+      {name:"朋喬",task:"最終場地確認",note:"拍照存檔，確認無遺留物品",items:"—"},
+      {name:"杜杜",task:"設備收拾",note:"—",items:"攝影設備"},
+    ]},
+    {loc:"松緣會館一樓宴會廳",people:[
+      {name:"Erin",task:"清點",note:"確認無遺留",items:"—"},
+      {name:"Abby",task:"音響歸還",note:"關閉音響，確認歸還",items:"—"},
+    ]},
+    {loc:"松緣會館二樓",people:[
+      {name:"劉芳",task:"漢服歸還完成",note:"確認數量完整",items:"—"},
+    ]},
+  ]},
+];
+
+// ── 渲染全場大表 ──
+const ovWrap=document.getElementById('ovWrap');
+const allPeople=[...new Set(OV.flatMap(ph=>ph.rows.flatMap(r=>r.people.map(p=>p.name))))];
+const table=document.createElement('table');table.className='ov-table';
+const thead=document.createElement('thead');
+const hr=document.createElement('tr');
+const thTime=document.createElement('th');thTime.className='th-time';thTime.textContent='時間';hr.appendChild(thTime);
+const thLoc=document.createElement('th');thLoc.className='th-loc';thLoc.textContent='地點';hr.appendChild(thLoc);
+allPeople.forEach(p=>{const th=document.createElement('th');th.textContent=p;th.style.background=PC[p]||'var(--green)';hr.appendChild(th);});
+thead.appendChild(hr);table.appendChild(thead);
+const tbody=document.createElement('tbody');
+OV.forEach(ph=>{
+  const sepRow=document.createElement('tr');sepRow.className='phase-sep';
+  const sepTd=document.createElement('td');sepTd.colSpan=2+allPeople.length;sepTd.textContent=ph.phase+' '+ph.time;
+  sepRow.appendChild(sepTd);tbody.appendChild(sepRow);
+  ph.rows.forEach(row=>{
+    const tr=document.createElement('tr');
+    const tdTime=document.createElement('td');tdTime.className='td-time';tdTime.textContent=ph.time;tr.appendChild(tdTime);
+    const tdLoc=document.createElement('td');tdLoc.className='td-loc';tdLoc.textContent=row.loc;tr.appendChild(tdLoc);
+    allPeople.forEach(pName=>{
+      const found=row.people.find(p=>p.name===pName);
+      const td=document.createElement('td');td.className='td-cell';
+      if(found){
+        const chip=document.createElement('div');chip.className='person-chip';
+        chip.style.background=PC[pName]||'#555';
+        chip.innerHTML=`<span class="dot"></span>${pName}`;
+        const lbl=document.createElement('div');lbl.className='task-label';
+        if(found.task.includes('cue')||found.task.includes('🔴'))lbl.innerHTML=`<span class="cue-tag">CUE</span>${found.task}`;
+        else lbl.textContent=found.task;
+        td.appendChild(chip);td.appendChild(lbl);
+        td.setAttribute('data-group',pName);
+        td.setAttribute('data-phase',ph.phase);
+        td.setAttribute('data-time',ph.time);
+        td.setAttribute('data-loc',row.loc);
+        td.onclick=()=>openCell(td,[found]);
+      } else {
+        td.className='td-cell empty';td.textContent='·';
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+});
+table.appendChild(tbody);ovWrap.appendChild(table);
+
+function openCell(cell,data){
+  const phase=cell.getAttribute('data-phase');
+  const time=cell.getAttribute('data-time');
+  const loc=cell.getAttribute('data-loc');
+  showPopup(phase+' — '+loc,time,loc,data);
+}
+function showPopup(title,time,loc,people){
+  document.getElementById('popupTitle').textContent=title;
+  const meta=document.getElementById('popupMeta');
+  meta.innerHTML=`<span class="popup-badge pb-time">${time}</span><span class="popup-badge pb-loc">${loc}</span>`;
+  const taskDiv=document.getElementById('popupTask');
+  const notesDiv=document.getElementById('popupNotes');
+  const itemsDiv=document.getElementById('popupItems');
+  taskDiv.innerHTML='';notesDiv.innerHTML='';itemsDiv.textContent='';
+  people.forEach((p,i)=>{
+    const c=PC[p.name]||'#555';
+    if(i>0){const sep=document.createElement('hr');sep.style.cssText='border:none;border-top:1px solid #eee;margin:10px 0';notesDiv.appendChild(sep);}
+    const nameSpan=document.createElement('span');
+    nameSpan.style.cssText=`display:inline-block;background:${c};color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;margin-bottom:6px`;
+    nameSpan.textContent=p.name;
+    taskDiv.appendChild(nameSpan);
+    const taskP=document.createElement('div');
+    taskP.className='popup-task';taskP.style.marginTop='4px';taskP.textContent=p.task;
+    taskDiv.appendChild(taskP);
+    if(p.note&&p.note!=='—'){
+      p.note.split('\n').forEach(line=>{
+        const span=document.createElement('span');span.className='step';
+        span.textContent=line.replace(/^[①②③④⑤⑥⑦⑧⑨⑩]\s*/,'');notesDiv.appendChild(span);
+      });
+    }
+    if(p.items&&p.items!=='—'){
+      const id=document.createElement('div');id.className='popup-items';id.textContent=p.items;taskDiv.appendChild(id);
+    }
+  });
+  document.getElementById('popupOverlay').classList.add('show');
+}
+function closePopup(e){
+  if(!e||e.target===document.getElementById('popupOverlay')){
+    document.getElementById('popupOverlay').classList.remove('show');
+  }
+}
+
+// ── 個人流程表 ──
+const allPersons=[...new Set(DATA.map(r=>r[3]))];
+const allPhases=[...new Set(DATA.map(r=>r[0]))];
+let curPerson='all',curPhase='all';
+const pf=document.getElementById('personFilters');
+allPersons.forEach(p=>{
+  const b=document.createElement('button');b.className='btn';b.textContent=p;
+  b.onclick=()=>filterPerson(p,b);pf.appendChild(b);
+});
+const phf=document.getElementById('phaseFilters');
+allPhases.forEach(ph=>{
+  const b=document.createElement('button');b.className='btn';b.textContent=ph;
+  b.onclick=()=>filterPhase(ph,b);phf.appendChild(b);
+});
+const leg=document.getElementById('legend');
+const ll=document.createElement('span');ll.className='legend-label';ll.textContent='人員色碼：';leg.appendChild(ll);
+allPersons.forEach(p=>{
+  if(!PC[p])return;
+  const d=document.createElement('div');d.className='legend-item';
+  d.innerHTML=`<div class="legend-dot" style="background:${PC[p]}"></div>${p}`;leg.appendChild(d);
+});
+function render(){
+  const tb=document.getElementById('dtBody');tb.innerHTML='';
+  const phaseOrder=[...new Set(DATA.map(r=>r[0]))];
+  const filtered=DATA.filter(r=>(curPerson==='all'||curPerson===r[3])&&(curPhase==='all'||curPhase===r[0]));
+  filtered.sort((a,b)=>{
+    const pi=phaseOrder.indexOf(a[0])-phaseOrder.indexOf(b[0]);if(pi!==0)return pi;
+    const ti=a[1].localeCompare(b[1]);if(ti!==0)return ti;
+    return a[2].localeCompare(b[2]);
+  });
+  let prevPhase=null,prevTime=null,prevLoc=null;
+  filtered.forEach((row,rowIdx)=>{
+    const[phase,time,loc,person,task,note,items]=row;
+    const tr=document.createElement('tr');
+    const newPhase=phase!==prevPhase;
+    const newTime=time!==prevTime||newPhase;
+    const newLoc=loc!==prevLoc||newTime;
+    if(newPhase)tr.classList.add('phase-first');
+    else if(newLoc)tr.classList.add('loc-first');
+    const vp=filtered.filter(r=>r[0]===phase);
+    const vt=filtered.filter(r=>r[0]===phase&&r[1]===time);
+    let vlCount=0;
+    for(let k=rowIdx;k<filtered.length;k++){
+      if(filtered[k][0]===phase&&filtered[k][1]===time&&filtered[k][2]===loc)vlCount++;
+      else break;
+    }
+    if(newPhase){const td=document.createElement('td');td.className='dt-phase';td.textContent=phase;td.rowSpan=vp.length;tr.appendChild(td);prevPhase=phase;}
+    if(newTime){const td=document.createElement('td');td.className='dt-time';td.textContent=time;td.rowSpan=vt.length;tr.appendChild(td);prevTime=time;}
+    if(newLoc){const td=document.createElement('td');td.className='dt-locbar';td.rowSpan=vlCount;td.style.background=LOC_COLOR[loc]||'#888';td.title=loc;tr.appendChild(td);prevLoc=loc;}
+    const tdP=document.createElement('td');tdP.className='dt-person';tdP.style.background=PC[person]||'#555';tdP.textContent=person;tr.appendChild(tdP);
+    const tdL=document.createElement('td');tdL.style.cssText='font-size:10px;color:#1a3d2b;font-weight:600;background:#f0f4f1;vertical-align:middle;padding:6px 8px;border-left:3px solid '+(LOC_COLOR[loc]||'#888');tdL.textContent=loc;tr.appendChild(tdL);
+    const tdT=document.createElement('td');tdT.className='dt-task';tdT.textContent=task;tr.appendChild(tdT);
+    const tdN=document.createElement('td');tdN.className='dt-note';
+    if(note&&note!=='—'){note.split('\n').forEach(l=>{const s=document.createElement('span');s.className='step';s.textContent=l.replace(/^[①②③④⑤⑥⑦⑧⑨⑩]\s*/,'');tdN.appendChild(s);});}
+    else tdN.textContent='—';
+    tr.appendChild(tdN);
+    const tdI=document.createElement('td');tdI.className='dt-items';tdI.textContent=items;tr.appendChild(tdI);
+    tb.appendChild(tr);
+    prevPhase=phase;prevTime=time;prevLoc=loc;
+  });
+}
+function filterPerson(p,btn){
+  curPerson=p;
+  document.querySelectorAll('#personFilters .btn').forEach(b=>{b.classList.remove('active');b.style.background='';b.style.borderColor='';});
+  btn.classList.add('active');
+  if(p!=='all'&&PC[p]){btn.style.background=PC[p];btn.style.borderColor=PC[p];}
+  render();
+}
+function filterPhase(ph,btn){
+  curPhase=ph;
+  document.querySelectorAll('#phaseFilters .btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');render();
+}
+function showTab(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+const ab=document.getElementById('audioBody');
+AUDIO.forEach((r,i)=>{
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td>${i+1}</td><td><span class="cue-badge">CUE</span>${r.t}</td><td>${r.seg}</td><td><input class="audio-input" placeholder="請填入音樂名稱"></td><td><span class="vol-badge">${r.vol}</span></td><td style="font-size:11px;color:var(--gray)">${r.note}</td>`;
+  ab.appendChild(tr);
+});
+render();
+</script>
+</body>
+</html>
